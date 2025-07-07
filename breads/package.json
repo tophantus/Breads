@@ -1,0 +1,31 @@
+{
+  "name": "breads",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@clerk/nextjs": "^6.23.3",
+    "@uploadthing/react": "^7.3.2",
+    "mongose": "^0.0.2-security",
+    "next": "15.3.5",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "svix": "^1.68.0",
+    "tailwindcss-animate": "^1.0.7",
+    "uploadthing": "^7.7.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.3",
+    "typescript": "^5"
+  }
+}
