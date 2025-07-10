@@ -49,6 +49,7 @@ export const POST = async (request: Request) => {
   const wh = new Webhook(process.env.NEXT_CLERK_WEBHOOK_SECRET || "");
 
   let evnt: Event | null = null;
+  console.log("receiving")
 
   try {
     evnt = wh.verify(
