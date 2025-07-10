@@ -1,6 +1,7 @@
 import { fetchUserPosts } from "@/lib/actions/user.actions";
 import { redirect } from "next/navigation";
 import BreadCard from "../cards/BreadCard";
+import { fetchCommunityPosts } from "@/lib/actions/community.actions";
 
 interface Props {
     currentUserId: string;
@@ -14,9 +15,12 @@ const BreadTab = async ({
     accountType
 }: Props) => {
 
-    let result = await fetchUserPosts(accountId);
+    let result: any = accountType === 'User' ? await fetchUserPosts(accountId) : await fetchCommunityPosts(accountId);
 
+    console.log("acc", accountType)
     if (!result) redirect('/');
+
+    console.log("Result",result)
 
     return (
         <section className="mt-9 flex flex-col gap-10">

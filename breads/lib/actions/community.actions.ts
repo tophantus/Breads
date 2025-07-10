@@ -84,13 +84,20 @@ export async function fetchCommunityPosts(id: string) {
           select: "name image id", // Select the "name" and "_id" fields from the "User" model
         },
         {
+          path: 'community',
+          model: Community,
+          select: "_id id name image"
+        },
+        {
           path: "children",
           model: Bread,
-          populate: {
-            path: "author",
-            model: User,
-            select: "image _id", // Select the "name" and "_id" fields from the "User" model
-          },
+          populate: [
+            {
+              path: "author",
+              model: User,
+              select: "image _id", // Select the "name" and "_id" fields from the "User" model
+            }
+          ],
         },
       ],
     });
