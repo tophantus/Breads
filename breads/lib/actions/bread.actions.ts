@@ -34,7 +34,7 @@ export async function createBread({text, author, communityId, path}: Params) {
 
 export async function fetchPosts(pageNumber = 1, pageSize = 20) {
     try {
-        connectToDb();
+        await connectToDb();
 
         const skipAmount = (pageNumber - 1) * pageSize;
 
@@ -68,7 +68,7 @@ export async function fetchPosts(pageNumber = 1, pageSize = 20) {
 
 export async function fetchBreadById(id: string) {
     try {
-        connectToDb();
+        await connectToDb();
 
         const bread = await Bread.findById(id)
             .populate({
@@ -109,7 +109,7 @@ export async function addCommentToBread(
     path: string
 ) {
     try {
-        connectToDb();
+        await connectToDb();
         const originalBread = await Bread.findById(breadId);
         if (!originalBread) throw new Error("Bread not found")
         

@@ -3,7 +3,6 @@
 import { connectToDb } from "../mongoose"
 import User from "../models/user.model";
 import { revalidatePath } from "next/cache";
-import { ca } from "zod/v4/locales";
 import Bread from "../models/bread.model";
 import { FilterQuery, SortOrder } from "mongoose";
 
@@ -25,7 +24,7 @@ export async function updateUser({
   username,
   image,
 }: Params): Promise<void> {
-    connectToDb();
+    await connectToDb();
 
     try {
         await User.findOneAndUpdate(
@@ -53,7 +52,7 @@ export async function updateUser({
 
 export async function fetchUser(userId: string) {
     try {
-        connectToDb();
+        await connectToDb();
 
         return await User
             .findOne({id: userId})
@@ -107,7 +106,7 @@ export async function fetchUsers({
     sortBy= "desc"
 }: FetchUsersProps) {
     try {
-        connectToDb();
+        await connectToDb();
         const skipAmount = (pageNumber - 1) * pageSize;
         const regex = new RegExp(searchString, "i");
 
@@ -143,7 +142,7 @@ export async function fetchUsers({
 
 export async function getActivities(userId: string) {
     try {
-        connectToDb();
+        await connectToDb();
 
         const userBreads = await Bread.find({author: userId});
 
