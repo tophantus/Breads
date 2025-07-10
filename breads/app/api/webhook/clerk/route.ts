@@ -35,7 +35,7 @@ type Event = {
 };
 
 export const POST = async (request: Request) => {
-  const payload = await request.json();
+  const payload = await request.text();
   const header = await headers();
 
   const heads = {
@@ -53,7 +53,7 @@ export const POST = async (request: Request) => {
 
   try {
     evnt = wh.verify(
-      JSON.stringify(payload),
+      payload,
       heads as IncomingHttpHeaders & WebhookRequiredHeaders
     ) as Event;
   } catch (err) {
