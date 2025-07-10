@@ -5,6 +5,8 @@ import User from "../models/user.model";
 import { revalidatePath } from "next/cache";
 import Bread from "../models/bread.model";
 import { FilterQuery, SortOrder } from "mongoose";
+import path from "path";
+import Community from "../models/community.model";
 
 
 interface Params {
@@ -73,15 +75,22 @@ export async function fetchUserPosts(userId: string) {
             .populate({
                 path: 'breads',
                 model: Bread,
-                populate: {
-                    path: 'children',
-                    model: Bread,
-                    populate: {
-                        path: 'author',
-                        model: User,
-                        select: "name image id"
+                populate: [
+                    {
+                        path: 'community',
+                        model: Community,
+                        select: "name _id id image"
+                    },
+                    {
+                        path: 'children',
+                        model: Bread,
+                        populate: {
+                            path: 'author',
+                            model: User,
+                            select: "name image id"
+                        }
                     }
-                }
+                ]
             })
         
         return breads;

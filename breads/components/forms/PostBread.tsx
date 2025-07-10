@@ -10,6 +10,7 @@ import {Textarea} from "@/components/ui/textarea"
 import { createBread } from "@/lib/actions/bread.actions";
 import z from "zod";
 import Bread from "@/lib/models/bread.model";
+import { useOrganization } from "@clerk/nextjs";
 
 interface Props {
   userId: string;
@@ -18,6 +19,7 @@ interface Props {
 function PostBread({userId}: Props) {
     const pathname = usePathname();
     const router = useRouter();
+    const { organization } = useOrganization();
 
     const form = useForm({
         resolver: zodResolver(BreadValidation),
@@ -31,7 +33,7 @@ function PostBread({userId}: Props) {
         await createBread({
             text: values.bread,
             author: userId,
-            communityId: null,
+            communityId: organization ? organization.id : null,
             path: pathname
         })
 

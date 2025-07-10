@@ -6,6 +6,7 @@ import { model } from "mongoose";
 import path from "path";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
+import Community from "../models/community.model";
 
 interface Params {
     text: string,
@@ -17,16 +18,29 @@ interface Params {
 export async function createBread({text, author, communityId, path}: Params) {
     try {
         connectToDb();
+
+        const communityIdObject = await Community.findOne(
+            {id: communityId},
+            {_id: 1}
+        )
     
         const createdBread = await Bread.create({
             text,
             author,
-            community: null
+            community: communityIdObject
         });
 
         await User.findByIdAndUpdate(author, {
             $push: {breads: createdBread._id}
         })
+
+        if (communityIdObject) {
+            await Community.findByIdAndUpdate(communityIdObject, {
+                $push: {breads: createdBread._id}
+            })
+        }
+
+        revalidatePath(path)
     } catch (error: any) {
         throw new Error(`Failed to create Bread: ${error.message}`)
     }
@@ -44,6 +58,7 @@ export async function fetchPosts(pageNumber = 1, pageSize = 20) {
             .skip(skipAmount)
             .limit(pageSize)
             .populate({path: 'author', model: User})
+            .populate({path: 'community', model: Community})
             .populate({
                 path: 'children',
                 populate: {
@@ -74,6 +89,11 @@ export async function fetchBreadById(id: string) {
             .populate({
                 path: 'author',
                 model: User,
+                select: "_id id name image"
+            })
+            .populate({
+                path: 'community',
+                model: Community,
                 select: "_id id name image"
             })
             .populate({
